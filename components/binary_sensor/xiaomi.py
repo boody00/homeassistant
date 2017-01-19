@@ -83,6 +83,10 @@ class XiaomiMotionSensor(XiaomiDevice, BinarySensorDevice):
     def parse_data(self, data):
         if 'status' in data:
             value = data['status']
+            self._hass.bus.fire('motion_action', {
+                'entity_id': self.entity_id,
+                'action_type': value
+            })
             if value == 'motion':
                 if self._state == True: 
                     return False
@@ -146,6 +150,10 @@ class XiaomiDoorSensor(XiaomiDevice, BinarySensorDevice):
             return False
 
         value = data['status']
+        self._hass.bus.fire('door_window_action', {
+            'entity_id': self.entity_id,
+            'action_type': value
+        })
         if value == 'open' or value == 'no_close':
             if self._state == True:
                 return False
