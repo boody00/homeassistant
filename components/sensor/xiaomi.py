@@ -36,24 +36,6 @@ class XiaomiSensor(XiaomiDevice):
         XiaomiDevice.__init__(self, device, name, xiaomi_hub)
 
     @property
-    def _is_humidity(self):
-        return self._data_key == 'humidity'
-
-    @property
-    def _is_temperature(self):
-        return self._data_key == 'temperature'
-
-    @property
-    def available(self):
-        """Return True if entity is available."""
-        if self._is_temperature and self.current_value != 100:
-            return True
-        elif self._is_humidity and self.current_value != 0:
-            return True
-
-        return False
-
-    @property
     def state(self):
         """Return the name of the sensor."""
         return self.current_value
@@ -71,5 +53,10 @@ class XiaomiSensor(XiaomiDevice):
         value = data.get(self._data_key)
         if value is None:
             return False
-        self.current_value = int(value) / 100
+        current_value = int(value) / 100
+        if self._data_key == 'temperature' and current_value == 100:
+            return False
+        if self._data_key == 'humidity' and current_value == 0:
+            return False
+        self.current_value = current_value
         return True
