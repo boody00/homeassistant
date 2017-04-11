@@ -277,7 +277,7 @@ class XiaomiGateway:
         sensors = ['sensor_ht']
         binary_sensors = ['magnet', 'motion', 'switch', '86sw1', '86sw2', 'cube']
         switches = ['plug', 'ctrl_neutral1', 'ctrl_neutral2']
-        lights = ['gateway']
+        gateway = ['gateway']
 
         for sid in sids:
             cmd = '{"cmd":"read","sid":"' + sid + '"}'
@@ -297,8 +297,8 @@ class XiaomiGateway:
                 device_type = 'binary_sensor'
             elif model in switches:
                 device_type = 'switch'
-            elif model in lights:
-                device_type = 'light'
+            elif model in gateway:
+                device_type = 'gateway'
             else:
                 _LOGGER.error('Unsupported devices : %s', model)
                 continue
@@ -308,6 +308,9 @@ class XiaomiGateway:
                 "sid":resp["sid"],
                 "short_id":resp["short_id"],
                 "data":data}
+            if device_type == 'gateway':
+               self.devices['light'].append(xiaomi_device)
+               self.devices['sensor'].append(xiaomi_device)
             self.devices[device_type].append(xiaomi_device)
         return True
 
