@@ -45,8 +45,8 @@ class XiaomiGenericSwitch(XiaomiDevice, SwitchDevice):
         self._state = False
         self._data_key = data_key
         self._in_use = False
-        self._load_power = 0
-        self._power_consumed = 0
+        self._load_power = ''
+        self._power_consumed = ''
         XiaomiDevice.__init__(self, device, name, xiaomi_hub)
 
     @property
@@ -75,27 +75,34 @@ class XiaomiGenericSwitch(XiaomiDevice, SwitchDevice):
         """Turn the switch on."""
         if self.xiaomi_hub.write_to_hub(self._sid, **{self._data_key: 'on'}):
             self._state = True
+			self.xiaomi_hub.get_from_hub(self._sid)
             self.schedule_update_ha_state()
 
     def turn_off(self):
         """Turn the switch off."""
         if self.xiaomi_hub.write_to_hub(self._sid, **{self._data_key: 'off'}):
             self._state = False
+			self._in_use = False
+			self._load_power = '0 W'
             self.schedule_update_ha_state()
 
     def parse_data(self, data):
         """Parse data sent by gateway"""
         
         if IN_USE in data:
-            self._in_use = int(data[IN_USE])
-            if not self._in_use:
-                self._load_power = 0
+            if int(data[IN_USE]) == 1:
+			    self._in_use = True
+		    else:
+			    self._in_use = False
+            
+			if not self._in_use:
+                self._load_power = '0 W'
         
         if POWER_CONSUMED in data:
-            self._power_consumed = int(data[POWER_CONSUMED])
+            self._power_consumed = (int(data[POWER_CONSUMED])/1000)+' kWh'
         
         if LOAD_POWER in data:
-            self._load_power = int(data[LOAD_POWER])        
+            self._load_power = int(data[LOAD_POWER])+' W'       
         
         value = data.get(self._data_key)
         if value is None:

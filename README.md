@@ -23,14 +23,13 @@ This is an complete Home Assistant component for Xiaomi Gateway. It allows you t
 - Gateway Sensor
 - Battery
 - Ringtone play
+- Power Consumption
+- Gas sensor
+- Smoke sensor
 
 What's not available?
 
 - Gateway Radio
-- Power Consumption
-
-
-
 
 Installation (Raspberry Pi)
 ---------------------------
