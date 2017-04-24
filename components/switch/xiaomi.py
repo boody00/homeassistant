@@ -45,8 +45,8 @@ class XiaomiGenericSwitch(XiaomiDevice, SwitchDevice):
         self._state = False
         self._data_key = data_key
         self._in_use = False
-        self._load_power = ''
-        self._power_consumed = ''
+        self._load_power = 0
+        self._power_consumed = 0.0
         XiaomiDevice.__init__(self, device, name, xiaomi_hub)
 
     @property
@@ -83,7 +83,7 @@ class XiaomiGenericSwitch(XiaomiDevice, SwitchDevice):
         if self.xiaomi_hub.write_to_hub(self._sid, **{self._data_key: 'off'}):
             self._state = False
 			self._in_use = False
-			self._load_power = '0 W'
+			self._load_power = 0
             self.schedule_update_ha_state()
 
     def parse_data(self, data):
@@ -96,13 +96,13 @@ class XiaomiGenericSwitch(XiaomiDevice, SwitchDevice):
 			    self._in_use = False
             
 			if not self._in_use:
-                self._load_power = '0 W'
+                self._load_power = 0
         
         if POWER_CONSUMED in data:
-            self._power_consumed = (int(data[POWER_CONSUMED])/1000)+' kWh'
+            self._power_consumed = (int(data[POWER_CONSUMED])/1000)
         
         if LOAD_POWER in data:
-            self._load_power = int(data[LOAD_POWER])+' W'       
+            self._load_power = int(data[LOAD_POWER])       
         
         value = data.get(self._data_key)
         if value is None:
