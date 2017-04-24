@@ -85,6 +85,7 @@ class XiaomiNatgasSensor(XiaomiDevice, BinarySensorDevice):
  
         if DENSITY in data:
            self._density = int(data.get(DENSITY))          
+
             
         value = data.get(self._data_key)
         if value is None:
