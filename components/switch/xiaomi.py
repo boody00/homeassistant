@@ -91,9 +91,9 @@ class XiaomiGenericSwitch(XiaomiDevice, SwitchDevice):
         
         if IN_USE in data:
             if int(data[IN_USE]) == 1:
-			    self._in_use = True
-		    else:
-			    self._in_use = False
+               self._in_use = True
+            else:
+               self._in_use = False
             if not self._in_use:
                 self._load_power = 0
         
