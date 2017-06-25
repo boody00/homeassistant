@@ -52,7 +52,7 @@ def setup_platform(hass, config, add_devices, discovery_info=None):
                 devices.append(XiaomiCube(device, hass, gateway))
     add_devices(devices)
 
-class XiaomiNatgasSensor(XiaomiDevice, BinarySensorDevice):
+class XiaomiGasSensor(XiaomiDevice, BinarySensorDevice):
     """Representation of a XiaomiNatgasSensor."""
 
     def __init__(self, device, xiaomi_hub):
@@ -83,14 +83,7 @@ class XiaomiNatgasSensor(XiaomiDevice, BinarySensorDevice):
         """Parse data sent by gateway"""
 
         if DENSITY in data:
-<<<<<<< HEAD
-           self._density = int(data.get(DENSITY))          
-
-            
-=======
            self._density = int(data.get(DENSITY))
-
->>>>>>> refs/remotes/Danielhiversen/master
         value = data.get(self._data_key)
         if value is None:
             return False
